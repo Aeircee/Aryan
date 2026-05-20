@@ -1,0 +1,250 @@
+/* ═══════════════════════════════════════════════════════════════
+   GLOBALS.CSS  –  Brutalist-Retro Design System
+   Portfolio clone of pmanifestoo.vercel.app
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. Google Fonts ─────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500;600&display=swap");
+
+/* 2. Tailwind base ────────────────────────────────────────────── */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* 3. Tailwind theme pointer (v4 syntax) ────────────────────────── */
+@config "../tailwind.config.ts";
+
+/* ───────────────────────────────────────────────────────────────
+   CSS CUSTOM PROPERTIES  (Brutalist Tokens)
+   ─────────────────────────────────────────────────────────────── */
+:root {
+  /* palette */
+  --paper:      #f0ede6;
+  --cream:      #ebe8e0;
+  --accent:     #e8e4d4;
+  --dark:       #1a1a1a;
+  --black:      #000000;
+  --stamp-red:  #8b1a1a;
+
+  /* windows 95 */
+  --win95-bg:         #c0c0c0;
+  --win95-highlight:  #ffffff;
+  --win95-shadow:     #808080;
+  --win95-dark:       #404040;
+  --win95-blue:       #000080;
+  --win95-blue-light: #1084d0;
+
+  /* typography */
+  --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-body:    "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    "Courier Prime", "Fira Code", "Courier New", Courier, monospace;
+
+  /* borders */
+  --border-brutalist: 2px solid #000000;
+  --border-brutalist-thick: 3px solid #000000;
+
+  /* shadows */
+  --shadow-brutalist:    4px 4px 0px #000000;
+  --shadow-brutalist-lg: 6px 6px 0px #000000;
+  --shadow-brutalist-sm: 2px 2px 0px #000000;
+  --shadow-win95-raised: inset -1px -1px 0 #404040, inset 1px 1px 0 #fff,
+                          inset -2px -2px 0 #808080, inset 2px 2px 0 #dfdfdf;
+  --shadow-win95-sunken: inset 1px 1px 0 #404040, inset -1px -1px 0 #fff,
+                          inset 2px 2px 0 #808080, inset -2px -2px 0 #dfdfdf;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   RESET & BASE
+   ─────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  /* Lenis overrides this to 'auto' for smooth scrolling */
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--paper);
+  color: var(--dark);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   TYPOGRAPHY UTILITIES
+   ─────────────────────────────────────────────────────────────── */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-mono-receipt {
+  font-family: var(--font-mono);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   BRUTALIST UTILITIES
+   ─────────────────────────────────────────────────────────────── */
+.border-brutalist {
+  border: var(--border-brutalist);
+}
+
+.border-brutalist-thick {
+  border: var(--border-brutalist-thick);
+}
+
+.shadow-brutalist {
+  box-shadow: var(--shadow-brutalist);
+}
+
+.shadow-brutalist-lg {
+  box-shadow: var(--shadow-brutalist-lg);
+}
+
+.shadow-brutalist-sm {
+  box-shadow: var(--shadow-brutalist-sm);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   WINDOWS 95 UTILITIES
+   ─────────────────────────────────────────────────────────────── */
+.win95-raised {
+  box-shadow: var(--shadow-win95-raised);
+}
+
+.win95-sunken {
+  box-shadow: var(--shadow-win95-sunken);
+}
+
+.win95-titlebar {
+  background: linear-gradient(to right, var(--win95-blue), var(--win95-blue-light));
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 3px 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   RECEIPT / DASHED LINES
+   ─────────────────────────────────────────────────────────────── */
+.receipt-dash {
+  border-top: 1px dashed var(--black);
+}
+
+.receipt-double {
+  border-top: 2px solid var(--black);
+  padding-top: 2px;
+  box-shadow: 0 2px 0 var(--black);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   MARQUEE CONTAINER
+   ─────────────────────────────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   SCROLLBAR STYLING
+   ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cream);
+  border-left: 1px solid var(--black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dark);
+  border: 1px solid var(--black);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   SELECTION
+   ─────────────────────────────────────────────────────────────── */
+::selection {
+  background: var(--dark);
+  color: var(--paper);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   LENIS SMOOTH SCROLL (html.lenis)
+   ─────────────────────────────────────────────────────────────── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   ANIMATIONS
+   ─────────────────────────────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes print-slide {
+  from { clip-path: inset(0 0 100% 0); opacity: 0; }
+  to   { clip-path: inset(0 0 0% 0);   opacity: 1; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes stamp {
+  0%   { transform: scale(1.4) rotate(-12deg); opacity: 0; }
+  60%  { transform: scale(0.95) rotate(-8deg); opacity: 1; }
+  100% { transform: scale(1) rotate(-10deg);   opacity: 1; }
+}
+
+.animate-marquee        { animation: marquee 20s linear infinite; }
+.animate-marquee-slow   { animation: marquee 40s linear infinite; }
+.animate-spin-slow      { animation: spin-slow 12s linear infinite; }
+.animate-fade-up        { animation: fade-up 0.6s ease-out forwards; }
+.animate-print-slide    { animation: print-slide 1.2s cubic-bezier(0.22,1,0.36,1) forwards; }
+.animate-blink          { animation: blink 1.2s step-start infinite; }
+.animate-stamp          { animation: stamp 0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
