@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PromptViewer from "./PromptViewer";
 
-/* ───────────────────────────────────────────────────────────────
-   PROMPT DATA
-   Add new prompts here. Each key maps to /prompts/<key>.
-   ─────────────────────────────────────────────────────────────── */
 const promptsData: Record<string, { title: string; content: string }> = {
   "1": {
     title: "Prompt 1",
@@ -13,9 +9,6 @@ const promptsData: Record<string, { title: string; content: string }> = {
   },
 };
 
-/* ───────────────────────────────────────────────────────────────
-   METADATA
-   ─────────────────────────────────────────────────────────────── */
 export async function generateMetadata({
   params,
 }: {
@@ -37,9 +30,6 @@ export async function generateMetadata({
   };
 }
 
-/* ───────────────────────────────────────────────────────────────
-   PAGE COMPONENT
-   ─────────────────────────────────────────────────────────────── */
 export default async function PromptPage({
   params,
 }: {

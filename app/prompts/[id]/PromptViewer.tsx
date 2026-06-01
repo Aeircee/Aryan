@@ -1,83 +1,87 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-/* ═══════════════════════════════════════════════════════════════
-   COPY BUTTON
-   ═══════════════════════════════════════════════════════════════ */
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const handleCopy = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(text);
     } catch {
-      // Fallback for insecure contexts
       const ta = document.createElement("textarea");
       ta.value = text;
-      ta.style.cssText = "position:fixed;opacity:0;pointer-events:none";
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      ta.style.pointerEvents = "none";
       document.body.appendChild(ta);
+      ta.focus();
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
     }
+
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setCopied(false), 2000);
   }, [text]);
 
   return (
     <button
-      id="copy-prompt-button"
       type="button"
       onClick={handleCopy}
       aria-label={copied ? "Copied to clipboard" : "Copy prompt to clipboard"}
-      className={`
-        inline-flex cursor-pointer select-none items-center gap-2
-        rounded-lg border px-4 py-2
-        text-[13px] font-semibold tracking-wide
-        transition-all duration-300 ease-out
-        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/40
-        ${
-          copied
-            ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-400"
-            : "border-white/10 bg-white/[0.04] text-white/60 hover:border-white/20 hover:bg-white/[0.08] hover:text-white/90 active:scale-[0.96]"
-        }
-      `}
+      className={[
+        "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium",
+        "transition-all duration-200 ease-out active:scale-[0.98]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-0",
+        copied
+          ? "border-emerald-500/30 bg-emerald-500/15 text-emerald-400"
+          : "border-white/10 bg-white/[0.05] text-white/75 hover:border-white/20 hover:bg-white/[0.09] hover:text-white",
+      ].join(" ")}
     >
       {copied ? (
-        /* Checkmark icon */
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-            clipRule="evenodd"
-          />
-        </svg>
+        <>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          Copied
+        </>
       ) : (
-        /* Clipboard icon */
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-          <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-        </svg>
+        <>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+            <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+          </svg>
+          Copy
+        </>
       )}
-      {copied ? "Copied" : "Copy"}
     </button>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   PROMPT VIEWER — Premium, mobile-first UI
-   ═══════════════════════════════════════════════════════════════ */
 export default function PromptViewer({
   title,
   content,
@@ -86,54 +90,47 @@ export default function PromptViewer({
   content: string;
 }) {
   return (
-    <main className="flex min-h-[100dvh] items-start justify-center bg-[#09090b] font-sans sm:items-center">
-      {/* 
-        Outer padding: 
-        - Mobile:  20px (px-5) + 32px vertical (py-8)
-        - Tablet:  32px (sm:px-8) + 48px vertical (sm:py-12)
-        - Desktop: 48px (lg:px-12)
-      */}
-      <div className="w-full max-w-[800px] px-5 py-8 sm:px-8 sm:py-12 lg:px-12">
-        {/* ─── Card ─────────────────────────────────────────── */}
-        <div
-          className="
-            overflow-hidden rounded-2xl
-            border border-white/[0.07]
-            bg-[#111113]
-            shadow-[0_1px_3px_rgba(0,0,0,0.4),0_12px_50px_rgba(0,0,0,0.35)]
-          "
-        >
-          {/* Card header */}
-          <div className="flex items-center justify-between gap-4 border-b border-white/[0.06] px-5 py-4 sm:px-7 sm:py-5">
-            <h1 className="min-w-0 truncate text-lg font-semibold tracking-tight text-white sm:text-xl">
-              {title}
-            </h1>
+    <main className="min-h-dvh bg-[#07070a] text-white">
+      <div className="mx-auto flex min-h-dvh w-full max-w-5xl items-center px-4 py-8 sm:px-6 lg:px-8">
+        <section className="w-full overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+          <div className="flex items-start justify-between gap-4 border-b border-white/10 px-5 py-5 sm:px-7 sm:py-6">
+            <div className="min-w-0">
+              <p className="text-xs font-medium uppercase tracking-[0.24em] text-white/40">
+                Prompt
+              </p>
+              <h1 className="mt-2 truncate text-xl font-semibold tracking-tight text-white sm:text-2xl">
+                {title}
+              </h1>
+            </div>
             <CopyButton text={content} />
           </div>
 
-          {/* Card body — prompt content */}
           <div className="px-5 py-5 sm:px-7 sm:py-7">
-            <div
-              id="prompt-text-field"
-              className="
-                whitespace-pre-wrap break-words
-                rounded-xl border border-white/[0.05]
-                bg-white/[0.02] px-5 py-5
-                text-[15px] leading-[1.75] text-white/75
-                selection:bg-white/20 selection:text-white
-                sm:px-6 sm:py-6 sm:text-base sm:leading-[1.8]
-              "
+            <label
+              htmlFor="prompt-text"
+              className="mb-3 block text-sm font-medium text-white/45"
             >
-              {content}
-            </div>
-          </div>
-        </div>
+              Prompt content
+            </label>
 
-        {/* Subtle footer hint */}
-        <p className="mt-5 text-center text-[13px] text-white/20">
-          Tap <span className="text-white/30">Copy</span> to copy this prompt to
-          your clipboard.
-        </p>
+            <textarea
+              id="prompt-text"
+              readOnly
+              value={content}
+              className={[
+                "min-h-[220px] w-full resize-none rounded-2xl border border-white/10",
+                "bg-black/30 px-5 py-5 text-[15px] leading-7 text-white/85",
+                "outline-none transition-all duration-200",
+                "placeholder:text-white/20 focus:border-white/20",
+                "sm:min-h-[260px] sm:px-6 sm:py-6 sm:text-base",
+              ].join(" ")}
+            />
+
+            <p className="mt-3 text-sm text-white/35">
+              Read-only prompt. Use the copy button to copy the full text.
+            </p>
+          </div>
+        </section>
       </div>
     </main>
   );
