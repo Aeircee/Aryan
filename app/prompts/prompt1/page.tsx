@@ -1,14 +1,6 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import PromptViewer from "./PromptViewer";
+import PromptViewer from "../components/PromptViewer";
 
-/* ───────────────────────────────────────────────────────────────
-   PROMPT DATA
-   ─────────────────────────────────────────────────────────────── */
-const promptsData: Record<string, { title: string; content: string }> = {
-  "1": {
-    title: "Prompt 1",
-    content: `Build a single full-viewport hero section in React + TypeScript + Vite + Tailwind CSS, using \`lucide-react\` for icons. The component is a character-figurine carousel called "ARYAN CHAUDHARY".
+const prompt = `Build a single full-viewport hero section in React + TypeScript + Vite + Tailwind CSS, using \`lucide-react\` for icons. The component is a character-figurine carousel called "ARYAN CHAUDHARY".
 
 Fonts (load in \`index.html\` head):
 
@@ -251,48 +243,8 @@ Behavior summary:
 - clicking arrows rotates roles
 - background color, image positions, scales, blurs, and opacities all crossfade simultaneously over 650ms
 - easing: \`cubic-bezier(0.4,0,0.2,1)\`
-- character images sit at the bottom of the screen overlapping the giant "3D SHAPE" text behind them`,
-  },
-};
+- character images sit at the bottom of the screen overlapping the giant "3D SHAPE" text behind them`;
 
-/* ───────────────────────────────────────────────────────────────
-   METADATA
-   ─────────────────────────────────────────────────────────────── */
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}): Promise<Metadata> {
-  const { id } = await params;
-  const prompt = promptsData[id];
-
-  if (!prompt) {
-    return {
-      title: "404 — Page Not Found",
-      description: "This prompt does not exist.",
-    };
-  }
-
-  return {
-    title: `${prompt.title} — Aryan Chaudhary`,
-    description: `View and copy: ${prompt.content.slice(0, 140)}`,
-  };
-}
-
-/* ───────────────────────────────────────────────────────────────
-   PAGE COMPONENT
-   ─────────────────────────────────────────────────────────────── */
-export default async function PromptPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const prompt = promptsData[id];
-
-  if (!prompt) {
-    notFound();
-  }
-
-  return <PromptViewer content={prompt.content} />;
+export default function Prompt1Page() {
+  return <PromptViewer content={prompt} />;
 }
